@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather app </title>
+   
+    <style>
+        *{
+        margin: 0;
+        padding: 0;
+        font-family: sans-serif;
+        box-sizing: border-box;
+        }
+        .card{
+            width: 500px;
+            height: 400px;
+            background: linear-gradient(200deg,aqua,blue);
+            color: #fff;
+            margin:100px auto 0;
+            border-radius: 20px;
+            padding: 40px 35px;
+            text-align: center;
+        
+        } 
+         .searchcard{
+            width: 100%;
+            
+            align-items: center;
+            display: flex;
+            justify-content: space-between;
+            
+         }  
+         .searchcard input{
+            border: 0;
+            outline: 0;
+            background: #fff;
+            color: #555;
+            padding: 10px 25px;
+            height: 30px;
+            border-radius: 30px;
+            flex: 1;
+            margin-right: 16px;
+            font-size: 18px;
+         }
+        .searchcard img{
+            width: 30px;
+            height: 25px;
+            cursor: pointer;
+            border-radius:50px ;
+            
+        }
+        .weather img{
+            width: 80px;
+            height: 80px;
+        }
+        .details{
+            
+            
+            display: flex;
+            text-align: center;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+            margin-top:30px;
+        
+        }
+        .col img{
+            width: 80px;
+            height: 80px;
+        }
+        
+    </style>
+</head>
+<body>
+    <div class="card">
+        <div class="searchcard">
+            <input type="text" placeholder="enter city name" spellcheck="false">
+             <button><img src="/pictures/search.jpg" alt=""></button>
+        </div>
+        <div class="weather">
+            <img src="/pictures/cloudy.jpg" class="weather-icon">
+            <h1 class="temp">22°C</h1>
+            <h2 class="city">kolkata</h2>
+            <div class="details">
+                <div class="col">
+                    <img src="/pictures/humidity.png">
+                </div>
+                <p class="humidity">50%</p>
+                <p>Humidity</p>
+                <div class="col">
+                    <img src="/pictures/wind.png">
+                </div>
+                <p class="wind">16 km/h</p>
+                <p>Wind speed</p>
+            </div>
+
+        </div>
+    </div>
+    <script>
+    const apikey ="959bb9a2eef742e6abb63d8ebe724768";
+    const apiUrl ="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
+    const searchcard = document.querySelector(".searchcard input");
+    const searchBtn = document.querySelector(".searchcard button");  
+    const weatherIcon = document.querySelector(".weather-icon") ; 
+    
+    
+    async function checkweather(city){
+         const response = await fetch(apiUrl + city + `&appid=${apikey}`);
+         var data = await response.json();
+         console.log(data);
+         document.querySelector(".city").innerHTML=data.name;
+         document.querySelector(".temp").innerHTML=data.main.temp +"°C";
+         document.querySelector(".humidity").innerHTML=data.main.humidity+"%";
+         document.querySelector(".wind").innerHTML=data.wind.speed +"km/h";
+
+        if(data.weather[0].main=="Clouds"){
+            weatherIcon.src="/pictures/cloudy.jpg";
+        }
+        else if(data.weather[0].main=="Clear"){
+            weatherIcon.src="/pictures/clear.png";
+        }
+        else if(data.weather[0].main=="Rain"){
+            weatherIcon.src="/pictures/rain.png";
+        }
+
+
+
+    }
+    
+    searchBtn.addEventListener("click",()=>{
+        checkweather(searchcard.value);
+    })
+
+    
+        
+    </script>
+</body>
+</html>
